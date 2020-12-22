@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { MenuItem, FormControl, Select, Card, CardContent } from '@material-ui/core';
 import './App.css';
-import InfoBox from './InfoBox'
+import InfoBox from './InfoBox';
 import Map from './Map';
 import Table from './Table'
-import { sortData } from './util';
+import { prettyPrint, sortData } from './util';
 import Graph from './Graph';
-import "leaflet/dist/leaflet.css"
+import "leaflet/dist/leaflet.css";
 
 function App() {
-  const [countries, setCoutries] = useState([])
-  const [country, setCountry] = useState('worldwide')
-  const [countryInfo, setCountryInfo] = useState({})
-  const [tableData, setTableData] = useState([])
+  const [countries, setCoutries] = useState([]);
+  const [country, setCountry] = useState('worldwide');
+  const [countryInfo, setCountryInfo] = useState({});
+  const [tableData, setTableData] = useState([]);
   const [mapCenter, setMapCenter] = useState([34.80746, -40.4796]);
-  const [mapZoom, setMapZoom] = useState(3)
-  const [mapCountries, setMapCountries] = useState([])
+  const [mapZoom, setMapZoom] = useState(3);
+  const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
+
+
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
       .then(response => response.json())
@@ -90,11 +93,27 @@ function App() {
         </div>
 
         <div className="app__stats">
-          <InfoBox title="Coronavirus Cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
-          <InfoBox title="Recoverd" cases={countryInfo.todayRecovered} total={countryInfo.cases} />
-          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.cases} />
+          <InfoBox
+            onClick={(e) => setCasesType("cases")}
+            title="Coronavirus Cases"
+            cases={prettyPrint(countryInfo.todayCases)}
+            total={prettyPrint(countryInfo.cases)}
+          />
+
+          <InfoBox
+            onClick={(e) => setCasesType("recovered")}
+            title="Recoverd"
+            cases={prettyPrint(countryInfo.todayRecovered)}
+            total={prettyPrint(countryInfo.cases)}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("deaths")}
+            title="Deaths"
+            cases={prettyPrint(countryInfo.todayDeaths)}
+            total={prettyPrint(countryInfo.cases)}
+          />
         </div>
-        <Map countries={mapCountries} casesType="deaths" center={mapCenter} zoom={mapZoom} />
+        <Map countries={mapCountries} casesType={casesType} center={mapCenter} zoom={mapZoom} />
       </div>
 
       <Card className="app__right">
