@@ -2,22 +2,20 @@ import { Circle, Popup } from 'react-leaflet'
 import numeral from 'numeral'
 import React from 'react'
 
-
 const casesTypeColors = {
-    cases: {
+    "cases": {
         hex: "#CC1034",
         multiplier: 800,
     },
-    recovered: {
-        hex: "#7dd71d",
+    "recovered": {
+        hex: "green",
         multiplier: 1200,
     },
-    deaths: {
+    "deaths": {
         hex: "#fb4443",
         multiplier: 2000,
     }
 }
-
 
 export const sortData = (data) => {
     const sortedData = [...data];
@@ -26,12 +24,13 @@ export const sortData = (data) => {
 
 export const showDataOnMap = (data, casesType = "cases") => (
     data.map(country => (
-
         <Circle
+            pathOptions={{
+                color: casesTypeColors[casesType].hex,
+                fillColor: casesTypeColors[casesType].hex,
+                fillOpacity: 0.4
+            }}
             center={[country.countryInfo.lat, country.countryInfo.long]}
-            fillOpacity={0.4}
-            color={casesTypeColors[casesType].hex}
-            fillColor={casesTypeColors[casesType].hex}
             radius={Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier}
         >
             <Popup>
