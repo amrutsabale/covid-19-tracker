@@ -48,7 +48,7 @@ const options = {
     },
 };
 
-function Graph({ caseType = "cases" }) {
+function Graph({ caseType = "cases", ...props }) {
     const [data, setdata] = useState({})
 
 
@@ -84,7 +84,7 @@ function Graph({ caseType = "cases" }) {
 
 
     return (
-        <div>
+        <div className={props.className}>
             {data.length > 0 && (
                 <Line
                     options={options}
